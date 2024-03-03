@@ -5,6 +5,7 @@ class APISpider(scrapy.Spider):
     name = "data"
     start_page = 0
     allowed_domains = ["hm.com"]
+    # threse are the APIs links of all website and scrapy framework will extract them all 
     start_urls = ["https://www2.hm.com/hmwebservices/service/products/plp/hm-greatbritain/Online/en?q=:stock:category:men_all:sale:false:oldSale:false:isNew:false&currentPage=0&pageSize=36&skipStockCheck=false",
                   "https://www2.hm.com/hmwebservices/service/products/plp/hm-greatbritain/Online/en?q=:stock:category:men_all:sale:true:oldSale:false:isNew:false&currentPage=0&pageSize=36&skipStockCheck=false",
                   "https://www2.hm.com/hmwebservices/service/products/plp/hm-greatbritain/Online/en?q=:stock:category:ladies_all:sale:false:oldSale:false:isNew:false&currentPage=0&pageSize=36&skipStockCheck=false",
@@ -20,7 +21,7 @@ class APISpider(scrapy.Spider):
                   "https://www2.hm.com/hmwebservices/service/products/plp/hm-greatbritain/Online/en?q=:stock:category:sportswear_kids_all:category:sportswear_kids_accessories:category:sportswear_women:category:sportswear_men:sale:true:isNew:false&currentPage=0&pageSize=36&skipStockCheck=false"]
 
     def parse(self, response):
-        
+        #Here we will extract the body of the json file and filter it after
         data = json.loads(response.body)
         results=data.get("results")
 
@@ -58,7 +59,7 @@ class APISpider(scrapy.Spider):
                 "item_url": "https://www2.hm.com/" + item_url,
             }
 
-
+        #here we extract the number of pages to paginate the all website 
         num_pages = data.get("pagination")["numberOfPages"]  
 
         for page_number in range(0, num_pages):
